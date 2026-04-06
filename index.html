@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugee Mental Health Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP */
+        * { box-sizing: border-box; }
+        
+        body {
+            background-color: #e2e8f0;
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden; /* Prevents scrolling so it acts like a presentation */
+            position: relative;
+        }
+
+        .slide-container {
+            align-items: center;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            font-family: 'Lato', sans-serif;
+            height: 600px;
+            justify-content: center;
+            padding: 40px 50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1050px;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        /* Active slide class */
+        .slide-container.active {
+            display: flex;
+            opacity: 1;
+            z-index: 10;
+        }
+
+        /* Abstract flowing background design */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 70% 30%, rgba(13, 148, 136, 0.04) 0%, transparent 50%),
+                        radial-gradient(circle at 30% 70%, rgba(15, 23, 42, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * { position: relative; z-index: 1; }
+
+        /* 2. CONSISTENT TYPOGRAPHY */
+        .slide-container h1, .slide-container h2, .slide-container h3 {
+            color: #0f172a;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .slide-container p, .slide-container li, .slide-container .subtitle {
+            color: #334155;
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            margin-bottom: 15px;
+        }
+
+        .slide-container h1 { font-size: 55px; line-height: 1.2; }
+        
+        .slide-container .slide-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: left;
+            width: 100%;
+            color: #0f172a;
+        }
+
+        .slide-container h3 { font-size: 24px; margin-bottom: 12px; }
+
+        .slide-container p, .slide-container li { font-size: 16px; line-height: 1.5; }
+        .slide-container .subtitle { font-size: 20px; font-weight: 400; color: #475569; margin-top: 15px; }
+
+        .content-area {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .accent { color: #0d9488; }
+
+        /* Navigation Controls */
+        .nav-btn {
+            background: white;
+            color: #0d9488;
+            border: 2px solid #0d9488;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn:hover { background: #0d9488; color: white; }
+        .nav-btn:disabled { border-color: #cbd5e1; color: #cbd5e1; cursor: not-allowed; background: white; box-shadow: none; }
+        
+        .presentation-footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+            pointer-events: none; /* Allows clicks to pass through empty areas */
+        }
+        
+        .presentation-footer > * {
+            pointer-events: auto; /* Re-enables clicking on the actual footer buttons/text */
+        }
+        
+        .slide-counter {
+            font-family: 'Poppins', sans-serif; 
+            font-size: 16px; 
+            color: #475569; 
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .keyboard-hint {
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* 3. LAYOUT DEFINITIONS */
+        
+        /* Title Slide */
+        .title-layout { text-align: center; max-width: 1000px; }
+
+        /* Section Title */
+        .section-title-layout {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+        .section-title-layout hr {
+            background-color: #0d9488;
+            border: none;
+            height: 5px;
+            margin: 0 auto 30px auto;
+            width: 120px;
+        }
+        .section-title-layout h2 { font-size: 48px; }
+
+        /* Highlighted Numbers */
+        .highlight-numbers-layout {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .highlight-numbers-layout > div { flex: 1; text-align: center; }
+        .highlight-numbers-layout > div:first-child, .highlight-numbers-layout > div:nth-child(2) { flex: 0 0 25%; }
+        .highlight-numbers-layout .number {
+            color: #0d9488;
+            font-size: 75px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1;
+        }
+        .highlight-numbers-layout .number-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 15px;
+        }
+
+        /* Timeline Layout */
+        .timeline-layout {
+            align-items: stretch;
+            display: flex;
+            height: stretch;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+        }
+        .timeline-layout .timeline-line {
+            background-color: #cbd5e1;
+            height: 4px;
+            left: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-2px);
+            width: 100%;
+            z-index: 0;
+        }
+        .timeline-item {
+            position: relative;
+            text-align: center;
+            width: 18%;
+        }
+        .timeline-circle {
+            background-color: #f8fafc;
+            border-radius: 50%;
+            border: 4px solid #0d9488;
+            height: 24px;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0;
+            outline: none;
+        }
+        .timeline-circle:hover {
+            background-color: #ccfbf1;
+            transform: translate(-50%, -50%) scale(1.3);
+            box-shadow: 0 0 12px rgba(13, 148, 136, 0.4);
+        }
+        .timeline-item.revealed .timeline-circle {
+            background-color: #0d9488;
+        }
+        .timeline-item .content-wrapper {
+            left: 0;
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .timeline-item:nth-child(odd) .content-wrapper { bottom: 50%; margin-bottom: 30px; transform: translateY(20px); }
+        .timeline-item:nth-child(even) .content-wrapper { margin-top: 30px; top: 50%; transform: translateY(-20px); }
+        .timeline-item.revealed .content-wrapper { opacity: 1; visibility: visible; transform: translateY(0); }
+        .timeline-item h3 { font-size: 18px; color: #0d9488; }
+        .timeline-item p { font-size: 14px; margin-bottom: 0; }
+
+        /* Tiled Text with Icons */
+        .tiled-content {
+            align-items: stretch;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+        }
+        .tile {
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .tile .icon { color: #0d9488; font-size: 36px; margin-bottom: 15px; }
+
+        /* Image Right Text Left */
+        .two-column {
+            align-items: flex-start;
+            display: flex;
+            gap: 60px;
+            width: 100%;
+        }
+        .two-column > div { flex: 1; }
+        .two-column ul { list-style: none; margin: 0; padding: 0; }
+        .two-column li { padding-left: 30px; position: relative; margin-bottom: 20px; }
+        .two-column li::before {
+            color: #0d9488;
+            content: '\f0da';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 20px;
+            left: 0;
+            position: absolute;
+            top: 2px;
+        }
+        .image-wrapper {
+            border-radius: 12px;
+            height: 320px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .two-column .image-wrapper img { height: 100%; object-fit: contain; width: 100%; border-radius: 12px; }
+
+        /* Bleed Image Right */
+        .slide-container.bleed-image-layout {
+            align-items: start;
+            display: grid;
+            gap: 50px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 0;
+        }
+        .slide-container.bleed-image-layout > .content-container { padding: 60px 0 60px 60px; display: flex; flex-direction: column; height: 100%; }
+        .slide-container.bleed-image-layout .bleed-text-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        .slide-container.bleed-image-layout > .image-container { height: 100%; overflow: hidden; width: 100%; }
+        .slide-container.bleed-image-layout img.bleed-image-side {
+            border-radius: 0 8px 8px 0;
+            display: block;
+            height: 600px;
+            object-fit: cover;
+            object-position: center;
+            width: 100%;
+        }
+
+        /* Tiled Images */
+        .image-tile { flex: 1; text-align: left; }
+        .image-tile .image-wrapper { height: 160px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .image-tile .image-wrapper img { object-fit: cover; width: 100%; height: 100%; }
+        .image-tile h3 { font-size: 22px; margin-bottom: 15px; }
+
+        /* Q&A / Interactive Quiz */
+        .qa-layout { align-self: center; margin: 0 auto; text-align: center; width: 100%; }
+        .qa-layout h2 { font-size: 60px; margin-bottom: 25px; color: #0d9488; }
+        .qa-layout p { font-size: 24px; color: #334155; }
+        
+        .quiz-container { width: 100%; max-width: 800px; margin-top: 20px; text-align: left; }
+        .quiz-option {
+            background: white; border: 2px solid #e2e8f0; border-radius: 8px;
+            padding: 12px 20px; margin-bottom: 10px; cursor: pointer;
+            font-size: 16px; text-align: left; transition: all 0.2s; width: 100%;
+            font-family: 'Lato', sans-serif; color: #334155;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex; align-items: center; gap: 15px;
+        }
+        .quiz-option:hover { border-color: #0d9488; background: #f0fdfa; transform: translateX(5px); }
+        .quiz-option.correct { background: #dcfce7; border-color: #22c55e; color: #166534; transform: none;}
+        .quiz-option.incorrect { background: #fee2e2; border-color: #ef4444; color: #991b1b; transform: none;}
+        .quiz-feedback { margin-top: 15px; font-size: 18px; font-weight: 600; min-height: 50px; line-height: 1.5; opacity: 0; transition: opacity 0.3s; }
+        .quiz-feedback.show { opacity: 1; }
+        .option-letter { font-weight: 700; background: #e2e8f0; border-radius: 4px; padding: 4px 12px; color: #475569; }
+        .correct .option-letter { background: #bbf7d0; color: #166534; }
+        .incorrect .option-letter { background: #fecaca; color: #991b1b; }
+        
+        /* Pen Tool Styles */
+        .draw-canvas {
+            position: fixed; /* Fixed prevents scrolling offsets */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 90; /* Above slides, below controls */
+            pointer-events: none; /* Disabled by default */
+        }
+        .draw-canvas.pen-mode-on {
+            pointer-events: auto; /* Enable drawing */
+            cursor: crosshair;
+        }
+        .pen-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 40px;
+            z-index: 110; /* Increased to stay firmly above the presentation footer */
+            display: flex;
+            gap: 10px;
+        }
+        .tool-btn {
+            background: white;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tool-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+        .tool-btn.active-tool {
+            background: #ef4444; /* Red */
+            color: white;
+            border-color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Drawing Canvas -->
+<canvas id="drawCanvas" class="draw-canvas"></canvas>
+
+<!-- Pen Controls -->
+<div class="pen-controls">
+    <button class="tool-btn" id="penToggleBtn" onclick="togglePen()" title="Toggle Red Pen (Draw anywhere)">
+        <i class="fa-solid fa-pen"></i>
+    </button>
+    <button class="tool-btn" id="clearBtn" onclick="clearCanvas()" title="Clear Drawings" style="display: none;">
+        <i class="fa-solid fa-eraser"></i>
+    </button>
+</div>
+
+<!-- Navigation Buttons & Footer Combined -->
+<div class="presentation-footer">
+    <div class="keyboard-hint"><i class="fa-regular fa-keyboard"></i> Use Left/Right arrows to navigate</div>
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" title="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="slide-counter" id="slide-counter">Slide 1 of 22</div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()" title="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
+
+<!-- ==========================================
+     PRESENTATION SLIDES
+     ========================================== -->
+
+<!-- Slide 1: Title Slide -->
+<div class="slide-container active">
+    <div class="title-layout">
+        <h1>Bridging the Treatment Gap in <span class="accent">Mental Health</span></h1>
+        <p class="subtitle">Barriers to Access for Refugees and Asylum Seekers in High-Income Countries</p>
+    </div>
+</div>
+
+<!-- =========================
+     SECTION 1: INTRODUCTION
+     ========================= -->
+<div class="slide-container">
+    <div class="section-title-layout">
+        <hr>
+        <h2>1. Introduction</h2>
+        <p class="subtitle" style="max-width: 800px; margin-top: 20px;">The clinical context, statistical disparities, and the conceptual framework of patient access.</p>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">The Clinical Context: Mental Illness Prevalence</h2>
+    <div class="content-area">
+        <div class="highlight-numbers-layout">
+            <div>
+                <div class="number">30%</div>
+                <div class="number-label">Depression Prevalence<br><span style="font-size: 14px; font-weight: 400; color: #475569;">Among Refugees</span></div>
+            </div>
+            <div>
+                <div class="number">29%</div>
+                <div class="number-label">PTSD Prevalence<br><span style="font-size: 14px; font-weight: 400; color: #475569;">Among Refugees</span></div>
+            </div>
+            <div style="text-align: left;">
+                <h3>A Disproportionate Need</h3>
+                <p>Compared to the host populations, refugees and asylum seekers are:</p>
+                <ul>
+                    <li><strong>7x more likely</strong> to experience PTSD.</li>
+                    <li><strong>3x more likely</strong> to experience depression.</li>
+                    <li><strong>2-3x more likely</strong> to experience anxiety, bipolar disorder, and psychosis.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">The Healthcare Paradox</h2>
+    <div class="content-area">
+        <p style="text-align: center; max-width: 800px; margin-bottom: 40px; font-size: 18px;">About 25% of the >40 million displaced individuals seek safety in High-Income Countries (HICs). Despite the abundance of resources, severe undertreatment persists.</p>
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-earth-americas"></i></div>
+                <h3>Resource Density</h3>
+                <p>Globally, <strong>>90%</strong> of mental health care resources are located in high-income countries.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-user-doctor"></i></div>
+                <h3>Staffing Ratios</h3>
+                <p>HICs average <strong>62 mental health workers</strong> per 100,000 population (compared to just 13 globally).</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-wallet"></i></div>
+                <h3>Funding Levels</h3>
+                <p>HICs allocate <strong>3.8%</strong> of total government health expenditure to mental health (vs 2.1% globally).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QUIZ 1 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-clipboard-question accent"></i> Knowledge Check 1</h2>
+    <div class="content-area">
+        <h3>According to the clinical context, refugees are how many times more likely to experience PTSD compared to host populations?</h3>
+        <div class="quiz-container">
+            <button class="quiz-option" onclick="handleQuiz(this, false, 'The prevalence of depression is 3x higher, but PTSD is even greater.', 'fb1')">
+                <span class="option-letter">A</span> 3 times more likely
+            </button>
+            <button class="quiz-option" onclick="handleQuiz(this, false, 'While a severe gap exists, this number does not reflect the PTSD statistic.', 'fb1')">
+                <span class="option-letter">B</span> 5 times more likely
+            </button>
+            <button class="quiz-option" data-correct="true" onclick="handleQuiz(this, true, 'Refugees face a massive 7x higher likelihood of experiencing PTSD, highlighting the critical need for accessible trauma care.', 'fb1')">
+                <span class="option-letter">C</span> 7 times more likely
+            </button>
+            <div id="fb1" class="quiz-feedback"></div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">The Patient Access Pathway (Levesque et al.)</h2>
+    <div class="content-area">
+        <p style="text-align: center; margin-bottom: 40px;">Access is a process, not a single event. Barriers occur at the transitions between these stages.</p>
+        <div class="timeline-layout">
+            <div class="timeline-line"></div>
+            <div class="timeline-item">
+                <button class="timeline-circle" onclick="toggleTimeline(this)" title="Reveal Stage"></button>
+                <div class="content-wrapper">
+                    <h3>1. Objective Need</h3>
+                    <p>Clinical symptoms develop requiring intervention.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <button class="timeline-circle" onclick="toggleTimeline(this)" title="Reveal Stage"></button>
+                <div class="content-wrapper">
+                    <h3>2. Perception</h3>
+                    <p>Recognizing symptoms as a mental health issue.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <button class="timeline-circle" onclick="toggleTimeline(this)" title="Reveal Stage"></button>
+                <div class="content-wrapper">
+                    <h3>3. Care Seeking</h3>
+                    <p>The decision to look for formal medical help.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <button class="timeline-circle" onclick="toggleTimeline(this)" title="Reveal Stage"></button>
+                <div class="content-wrapper">
+                    <h3>4. Utilisation</h3>
+                    <p>Reaching the service and completing intake procedures.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <button class="timeline-circle" onclick="toggleTimeline(this)" title="Reveal Stage"></button>
+                <div class="content-wrapper">
+                    <h3>5. Adequate Care</h3>
+                    <p>Receiving high-quality, continuous treatment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     SECTION 2: METHODS
+     ========================= -->
+<div class="slide-container">
+    <div class="section-title-layout">
+        <hr>
+        <h2>2. Methods</h2>
+        <p class="subtitle" style="max-width: 800px; margin-top: 20px;">A rigorous scoping review of reviews based on PRISMA-ScR guidelines.</p>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Search Strategy & PRISMA Flow</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <h3>1. Identification</h3>
+                <p>Searched 7 major databases covering Jan 2013 to Jan 2024. Initial search yielded <strong>1,272 records</strong>.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-filter"></i></div>
+                <h3>2. Screening</h3>
+                <p>After removing 654 duplicates, <strong>618 records</strong> were screened, leading to 49 full-text assessments.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-file-contract"></i></div>
+                <h3>3. Final Yield</h3>
+                <p><strong>10 comprehensive reviews</strong> (8 systematic, 2 scoping) met all inclusion criteria for final synthesis.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 35px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; width: 100%; text-align: left; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <h4 style="margin: 0 0 15px 0; color: #0d9488; font-family: 'Poppins', sans-serif; font-size: 18px;"><i class="fa-solid fa-list-check"></i> Primary Inclusion Criteria:</h4>
+            <ul style="margin: 0; padding-left: 20px; color: #334155; font-size: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: x 15px; row-gap: 10px;">
+                <li><strong>Population:</strong> Adult refugees and asylum seekers.</li>
+                <li><strong>Topic:</strong> Barriers/facilitators to accessing formal mental health care.</li>
+                <li><strong>Setting:</strong> Resettlement in High-Income Countries (HICs).</li>
+                <li><strong>Design:</strong> Peer-reviewed systematic or scoping reviews.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Characteristics of Included Evidence</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h3>Study Demographics</h3>
+                <p>The 10 included reviews consolidated findings from dozens of individual studies (ranging from 11 to 69 studies per review).</p>
+                <ul>
+                    <li><strong>Methodology:</strong> 5 exclusively analyzed qualitative studies; 5 utilized mixed methods. (Highlights a lack of purely quantitative synthesis).</li>
+                    <li><strong>Geography:</strong> High-income regions including Europe (e.g., Satinsky, Priebe), the UK (Pollard), Canada (Salam), USA, and Australia.</li>
+                    <li><strong>Populations:</strong> Analyzed adult refugees, explicitly focusing on subsets like women (DeSa, Firth), and mental healthcare providers (Peñuela-O'Brien).</li>
+                </ul>
+            </div>
+            <div>
+                <div class="image-wrapper">
+                    <img src="https://cdn.dribbble.com/userupload/21899551/file/original-4e8431f2c671a12f32b605ee6799ea45.gif" alt="Data and research papers on a desk">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     SECTION 3: RESULTS
+     ========================= -->
+<div class="slide-container">
+    <div class="section-title-layout">
+        <hr>
+        <h2>3. Results: Taxonomy of Barriers</h2>
+        <p class="subtitle" style="max-width: 800px; margin-top: 20px;">Analyzing patient-related constraints (Demand-Side) and systemic roadblocks (Supply-Side).</p>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Demand-Side: Understanding & Literacy</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h3>Cultural Differences</h3>
+                <p>Differences in mental health beliefs directly impact the 'Perception of Need' stage.</p>
+                <ul>
+                    <li><strong>Somatic Presentation:</strong> Psychological distress is frequently expressed and interpreted through somatic (physical) terms.</li>
+                    <li><strong>Supernatural Attributions:</strong> Across reviews, attributing symptoms to curses, witchcraft, or evil spirits was consistently identified as a barrier to accepting Western biomedical models.</li>
+                    <li><strong>Misperceptions of Severity:</strong> General lack of knowledge leads to inability to recognize symptoms as requiring formal treatment.</li>
+                </ul>
+            </div>
+            <div>
+                <div class="image-wrapper">
+                    <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHYxZ2dnMnV0bDN2N2JqZHhhaXE5bHRuNHlvMzAyMmUxZnQ2a28wdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/14pqs1b7bE7TZS/giphy.gif" alt="Abstract thinking and cultural understanding concept">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Demand-Side: Stigma & System Awareness</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <div class="image-wrapper" style="height: 250px; margin-bottom: 20px;">
+                    <img src="https://c8y.doxcdn.com/image/upload/c_fill,fl_progressive,h_800,q_auto,w_1600/ucyueplh75lz0qlz46zv.webp" alt="Community isolation concept">
+                </div>
+                <h3>The Fear of Stigma</h3>
+                <p>Mental illness is often labeled as "crazy" or "abnormal". Patients fear severe social isolation, discrimination, and ostracization from their core family and community networks.</p>
+            </div>
+            <div>
+                <div class="image-wrapper" style="height: 250px; margin-bottom: 20px;">
+                    <img src="https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=800&auto=format&fit=crop" alt="Navigating a complex map or system">
+                </div>
+                <h3>Lack of System Awareness</h3>
+                <p>Poor understanding of healthcare systems and legal coverage leads many patients to bypass traditional pathways, resulting in an overreliance on Emergency departments.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Demand-Side: Attitudes & Trust</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h3>The Barrier of Mistrust</h3>
+                <p>Past trauma and persecution deeply influence interactions with formal healthcare, preventing care seeking.</p>
+                <ul>
+                    <li><strong>Mistrust of Authority:</strong> Fears that doctors will report them to government or immigration authorities.</li>
+                    <li><strong>Legal Repercussions:</strong> High anxiety that a psychiatric diagnosis will negatively impact pending residency applications or child custody rights.</li>
+                    <li><strong>Informal Alternatives:</strong> Due to these fears, patients prefer informal sources (e.g., family, religious figures) as their first line of treatment.</li>
+                </ul>
+            </div>
+            <div>
+                <div class="image-wrapper">
+                    <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGxkYm42ZGQ1ZzNnMmoyM211aWF3YTk3aXo3M2JybTV0YmdmamhhbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NNNKHEZ14F9zSwHuZQ/giphy.gif" alt="Professional clinical setting showing trust and empathy between doctor and patient">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Supply-Side: Language & Structure</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h3>Systemic Roadblocks</h3>
+                <p>System failures that disrupt 'Care Utilisation'.</p>
+                <ul>
+                    <li><strong>Confidentiality Breaches:</strong> A severe lack of trained interpreters forces reliance on family/friends, compromising privacy and trust.</li>
+                    <li><strong>Gender Dynamics:</strong> Using male interpreters for female refugee patients significantly hinders communication and trauma disclosure.</li>
+                    <li><strong>Structural Isolation:</strong> Physical access is limited by isolated institutional housing and lack of transport.</li>
+                    <li><strong>Financial Chaos:</strong> Confusing insurance restrictions for newly arrived or pending asylum applicants block access to specialist care.</li>
+                </ul>
+            </div>
+            <div>
+                <div class="image-wrapper">
+                    <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXNlbDllNnBwYWdxZDJtYjcyeGk1NG9mb3phdm5pNWZvaDVkZWIzMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WySK0nQiJKLy25HLhp/giphy.gif" alt="Systemic roadblocks and paperwork">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Supply-Side: Provider Competence & Bias</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3>Provider Distress</h3>
+                <p>Therapists frequently report uncertainty and their own psychological distress when confronted with complex, severe trauma cases, leading to avoidance.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-ban"></i></div>
+                <h3>Gatekeeping & Bias</h3>
+                <p>Providers often distance themselves from "complex" patients. Patients reported facing insensitivity, stereotyping, and inappropriate racially charged questions.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-scale-unbalanced"></i></div>
+                <h3>Biomedical Rigidity</h3>
+                <p>Providers often demand that patients discard their personal cultural beliefs and conform strictly to Western biomedical treatment norms.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QUIZ 2 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-clipboard-question accent"></i> Knowledge Check 2</h2>
+    <div class="content-area">
+        <h3>Which of the following is an example of a "Supply-Side" barrier detailed in the study?</h3>
+        <div class="quiz-container">
+            <button class="quiz-option" onclick="handleQuiz(this, false, 'Fear of losing child custody is a patient-level fear, making it a Demand-Side attitude barrier.', 'fb2')">
+                <span class="option-letter">A</span> Fear that a diagnosis will lead to a loss of child custody.
+            </button>
+            <button class="quiz-option" onclick="handleQuiz(this, false, 'Attributing illness to supernatural elements is a cultural belief held by the patient (Demand-Side).', 'fb2')">
+                <span class="option-letter">B</span> Attributing mental illness to witchcraft or curses.
+            </button>
+            <button class="quiz-option" data-correct="true" onclick="handleQuiz(this, true, 'Correct! Systemic lack of interpreters and provider biases are structural factors within the healthcare system itself (Supply-Side).', 'fb2')">
+                <span class="option-letter">C</span> Relying on untrained family members due to a lack of professional interpreters.
+            </button>
+            <div id="fb2" class="quiz-feedback"></div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     SECTION 4: DISCUSSION
+     ========================= -->
+<div class="slide-container">
+    <div class="section-title-layout">
+        <hr>
+        <h2>4. Discussion</h2>
+        <p class="subtitle" style="max-width: 800px; margin-top: 20px;">Analyzing the literature gaps and structural deficits.</p>
+    </div>
+</div>
+
+<div class="slide-container bleed-image-layout">
+    <div class="content-container">
+        <h2 class="slide-title">Critical Research Gaps</h2>
+        <div class="bleed-text-side">
+            <h3>An Asymmetric Focus</h3>
+            <p>The academic literature predominantly focuses on the "peculiarities" and cultural deficits of the patients (demand-side) while widely neglecting how systemic structures and gatekeeping create inequality.</p>
+            <h3>The Evidence Gap</h3>
+            <p>Current evidence is almost entirely qualitative. There is a profound lack of quantitative data linking these specific barriers to measurable public health outcomes.</p>
+            <h3>Risk of Stereotyping</h3>
+            <p>Researchers risk over-generalizing entire patient populations by attributing low access solely to "divergent cultural beliefs."</p>
+        </div>
+    </div>
+    <div class="image-container">
+        <img class="bleed-image-side" src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?q=80&w=800&auto=format&fit=crop" alt="Abstract conceptual image representing research data and healthcare systems">
+    </div>
+</div>
+
+<!-- QUIZ 3 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-clipboard-question accent"></i> Knowledge Check 3</h2>
+    <div class="content-area">
+        <h3>According to the review, what is the primary "blind spot" or asymmetric focus in current academic literature regarding this topic?</h3>
+        <div class="quiz-container">
+            <button class="quiz-option" data-correct="true" onclick="handleQuiz(this, true, 'Exactly. Researchers tend to blame low service use on the patients cultural beliefs (Demand-Side) rather than interrogating the broken systems (Supply-Side).', 'fb3')">
+                <span class="option-letter">A</span> Blaming patient deficits (Demand-Side) rather than systemic inequalities (Supply-Side).
+            </button>
+            <button class="quiz-option" onclick="handleQuiz(this, false, 'The opposite is true! The literature actually neglects the study of systemic structures and provider biases.', 'fb3')">
+                <span class="option-letter">B</span> Focusing too much on provider prejudices rather than patient beliefs.
+            </button>
+            <button class="quiz-option" onclick="handleQuiz(this, false, 'There is actually a severe lack of quantitative data; most current evidence is qualitative.', 'fb3')">
+                <span class="option-letter">C</span> Relying too heavily on quantitative statistical models.
+            </button>
+            <div id="fb3" class="quiz-feedback"></div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     SECTION 5: CONCLUSION
+     ========================= -->
+<div class="slide-container">
+    <div class="section-title-layout">
+        <hr>
+        <h2>5. Conclusion</h2>
+        <p class="subtitle" style="max-width: 800px; margin-top: 20px;">Shifting the focus from persuading individual patients to redesigning equitable structures.</p>
+    </div>
+</div>
+
+<div class="slide-container">
+    <h2 class="slide-title">Actionable Strategies</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="image-tile">
+                <div class="image-wrapper"><img src="https://www.lean.org/wp-content/uploads/2020/10/835_large.jpg" alt="Health insurance documentation"></div>
+                <h3>Structural Prioritization</h3>
+                <p>Implement early health insurance coverage that explicitly includes mental health treatment immediately upon arrival.</p>
+            </div>
+            <div class="image-tile">
+                <div class="image-wrapper"><img src="taskshifting.jpg" alt="Diverse peer support group"></div>
+                <h3>Task-Shifting</h3>
+                <p>Utilize trained peer counselors from refugee communities to help patients navigate systems and offer support during wait times.</p>
+            </div>
+            <div class="image-tile">
+                <div class="image-wrapper"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDRheWZkdzVkdGV0eHNiOXpsemZtbGw3OXJsbGluODR6Zm1pcHZ5ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orif7cZGBNLqfOSZ2/giphy.gif" alt="Professional medical interpreter"></div>
+                <h3>Interpretation Infrastructure</h3>
+                <p>Guarantee adequate and sustainable funding for professional interpretation services to end the reliance on family members.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <div class="qa-layout">
+        <h2>The End</h2>
+        <p>Thank you for your attention.</p>
+        <div style="color: #475569; font-size: 20px; margin-top: 40px;">
+            Based on: Dumke et al. (2024), <i>Clinical Psychology Review</i>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     PRESENTATION LOGIC (JAVASCRIPT)
+     ========================================== -->
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-container');
+    const totalSlides = slides.length;
+    const counterDisplay = document.getElementById('slide-counter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Drawing Canvas Variables
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let penActive = false;
+
+    // Canvas Setup
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas(); // Initialize sizing
+
+    // Coordinate Normalization Helper
+    function getCoordinates(e) {
+        let x, y;
+        if (e.type.includes('touch')) {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+        // Since canvas is fixed at 0,0, clientX/Y maps perfectly to canvas X/Y
+        return { x: x, y: y };
+    }
+
+    // Pen Tool Logic
+    function togglePen() {
+        penActive = !penActive;
+        const penBtn = document.getElementById('penToggleBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        
+        if (penActive) {
+            canvas.classList.add('pen-mode-on');
+            penBtn.classList.add('active-tool');
+            clearBtn.style.display = 'flex';
+            
+            // Re-sync dimensions just in case
+            if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+                resizeCanvas();
+            }
+        } else {
+            canvas.classList.remove('pen-mode-on');
+            penBtn.classList.remove('active-tool');
+            clearBtn.style.display = 'none';
+            isDrawing = false;
+        }
+    }
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function startPosition(e) {
+        if (!penActive) return;
+        isDrawing = true;
+        const coords = getCoordinates(e);
+        
+        ctx.beginPath();
+        ctx.moveTo(coords.x, coords.y);
+        draw(e); // Draw a dot immediately on tap/click
+    }
+
+    function endPosition() {
+        if (!penActive) return;
+        isDrawing = false;
+        ctx.beginPath(); // Reset the path so next stroke doesn't connect
+    }
+
+    function draw(e) {
+        if (!isDrawing || !penActive) return;
+        
+        // Prevent scrolling on touch devices while drawing
+        if (e.type.includes('touch')) {
+            e.preventDefault(); 
+        }
+
+        const coords = getCoordinates(e);
+
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#ef4444'; // Red
+
+        ctx.lineTo(coords.x, coords.y);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(coords.x, coords.y);
+    }
+
+    // Canvas Event Listeners (Mouse & Touch)
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseout', endPosition); // Stop drawing if mouse leaves window
+
+    canvas.addEventListener('touchstart', startPosition, {passive: false});
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', draw, {passive: false});
+
+    function updatePresentation() {
+        // Hide all slides, show current
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+                // Reset timeline items if navigating away from the slide
+                slide.querySelectorAll('.timeline-item.revealed').forEach(item => item.classList.remove('revealed'));
+            }
+        });
+
+        // Update counter
+        counterDisplay.innerText = `Slide ${currentSlide + 1} of ${totalSlides}`;
+
+        // Update button states
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === totalSlides - 1;
+
+        // Clear drawings when moving to a new slide
+        clearCanvas();
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updatePresentation();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updatePresentation();
+        }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault(); // prevent page scroll on spacebar
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+    // Quiz Handling Logic
+    function handleQuiz(selectedButton, isCorrect, explanationText, feedbackId) {
+        const parentContainer = selectedButton.closest('.quiz-container');
+        const allOptions = parentContainer.querySelectorAll('.quiz-option');
+        const feedbackDiv = document.getElementById(feedbackId);
+
+        // Lock all options after a selection is made
+        allOptions.forEach(btn => {
+            btn.style.pointerEvents = 'none';
+            btn.disabled = true;
+        });
+
+        if (isCorrect) {
+            selectedButton.classList.add('correct');
+            feedbackDiv.innerHTML = `<span style="color: #22c55e"><i class="fa-solid fa-circle-check"></i> Correct!</span> ${explanationText}`;
+        } else {
+            selectedButton.classList.add('incorrect');
+            // Find and highlight the correct answer
+            const correctBtn = parentContainer.querySelector('[data-correct="true"]');
+            if (correctBtn) correctBtn.classList.add('correct');
+            feedbackDiv.innerHTML = `<span style="color: #ef4444"><i class="fa-solid fa-circle-xmark"></i> Incorrect.</span> ${explanationText}`;
+        }
+
+        // Show feedback with a slight fade-in
+        feedbackDiv.classList.add('show');
+    }
+
+    // Timeline Reveal Logic
+    function toggleTimeline(btn) {
+        const item = btn.closest('.timeline-item');
+        item.classList.toggle('revealed');
+    }
+
+    // Initialize the presentation state
+    updatePresentation();
+</script>
+
+</body>
+</html>
