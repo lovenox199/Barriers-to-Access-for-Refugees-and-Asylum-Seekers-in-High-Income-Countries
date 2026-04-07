@@ -28,14 +28,14 @@
             display: none; /* Hidden by default */
             flex-direction: column;
             font-family: 'Lato', sans-serif;
-            height: 600px;
+            height: 800px; /* INCREASED HEIGHT */
             justify-content: center;
-            padding: 40px 50px;
+            padding: 60px 80px; /* INCREASED PADDING */
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 1050px;
+            width: 1400px; /* INCREASED WIDTH */
             opacity: 0;
             transition: opacity 0.4s ease-in-out;
         }
@@ -78,21 +78,21 @@
             margin-bottom: 15px;
         }
 
-        .slide-container h1 { font-size: 55px; line-height: 1.2; }
+        .slide-container h1 { font-size: 68px; line-height: 1.2; } /* INCREASED */
         
         .slide-container .slide-title {
-            font-size: 32px;
+            font-size: 42px; /* INCREASED */
             font-weight: 600;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             text-align: left;
             width: 100%;
             color: #0f172a;
         }
 
-        .slide-container h3 { font-size: 24px; margin-bottom: 12px; }
+        .slide-container h3 { font-size: 28px; margin-bottom: 15px; } /* INCREASED */
 
-        .slide-container p, .slide-container li { font-size: 16px; line-height: 1.5; }
-        .slide-container .subtitle { font-size: 20px; font-weight: 400; color: #475569; margin-top: 15px; }
+        .slide-container p, .slide-container li { font-size: 20px; line-height: 1.6; } /* INCREASED */
+        .slide-container .subtitle { font-size: 24px; font-weight: 400; color: #475569; margin-top: 20px; } /* INCREASED */
 
         .content-area {
             align-items: center;
@@ -180,12 +180,12 @@
             margin: 0 auto 30px auto;
             width: 120px;
         }
-        .section-title-layout h2 { font-size: 48px; }
+        .section-title-layout h2 { font-size: 56px; } /* INCREASED */
 
         /* Highlighted Numbers */
         .highlight-numbers-layout {
             display: flex;
-            gap: 40px;
+            gap: 50px;
             align-items: center;
             justify-content: center;
             width: 100%;
@@ -194,13 +194,13 @@
         .highlight-numbers-layout > div:first-child, .highlight-numbers-layout > div:nth-child(2) { flex: 0 0 25%; }
         .highlight-numbers-layout .number {
             color: #0d9488;
-            font-size: 75px;
+            font-size: 90px; /* INCREASED */
             font-weight: 700;
             font-family: 'Poppins', sans-serif;
             line-height: 1;
         }
         .highlight-numbers-layout .number-label {
-            font-size: 18px;
+            font-size: 22px; /* INCREASED */
             font-weight: 700;
             color: #0f172a;
             margin-top: 15px;
@@ -265,8 +265,8 @@
         .timeline-item:nth-child(odd) .content-wrapper { bottom: 50%; margin-bottom: 30px; transform: translateY(20px); }
         .timeline-item:nth-child(even) .content-wrapper { margin-top: 30px; top: 50%; transform: translateY(-20px); }
         .timeline-item.revealed .content-wrapper { opacity: 1; visibility: visible; transform: translateY(0); }
-        .timeline-item h3 { font-size: 18px; color: #0d9488; }
-        .timeline-item p { font-size: 14px; margin-bottom: 0; }
+        .timeline-item h3 { font-size: 22px; color: #0d9488; } /* INCREASED */
+        .timeline-item p { font-size: 16px; margin-bottom: 0; } /* INCREASED */
 
         /* Tiled Text with Icons */
         .tiled-content {
@@ -288,7 +288,7 @@
             padding: 30px 20px;
             text-align: center;
         }
-        .tile .icon { color: #0d9488; font-size: 36px; margin-bottom: 15px; }
+        .tile .icon { color: #0d9488; font-size: 46px; margin-bottom: 20px; } /* INCREASED */
 
         /* Image Right Text Left */
         .two-column {
@@ -312,7 +312,7 @@
         }
         .image-wrapper {
             border-radius: 12px;
-            height: 320px;
+            height: 440px; /* INCREASED FOR LARGER CONTENT AREA */
             overflow: hidden;
             width: 100%;
         }
@@ -337,7 +337,7 @@
         .slide-container.bleed-image-layout img.bleed-image-side {
             border-radius: 0 8px 8px 0;
             display: block;
-            height: 600px;
+            height: 800px; /* INCREASED FOR LARGER CONTENT AREA */
             object-fit: cover;
             object-position: center;
             width: 100%;
@@ -345,20 +345,20 @@
 
         /* Tiled Images */
         .image-tile { flex: 1; text-align: left; }
-        .image-tile .image-wrapper { height: 160px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .image-tile .image-wrapper { height: 220px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); } /* INCREASED */
         .image-tile .image-wrapper img { object-fit: cover; width: 100%; height: 100%; }
-        .image-tile h3 { font-size: 22px; margin-bottom: 15px; }
+        .image-tile h3 { font-size: 26px; margin-bottom: 15px; } /* INCREASED */
 
         /* Q&A / Interactive Quiz */
         .qa-layout { align-self: center; margin: 0 auto; text-align: center; width: 100%; }
-        .qa-layout h2 { font-size: 60px; margin-bottom: 25px; color: #0d9488; }
-        .qa-layout p { font-size: 24px; color: #334155; }
+        .qa-layout h2 { font-size: 70px; margin-bottom: 30px; color: #0d9488; } /* INCREASED */
+        .qa-layout p { font-size: 28px; color: #334155; } /* INCREASED */
         
         .quiz-container { width: 100%; max-width: 800px; margin-top: 20px; text-align: left; }
         .quiz-option {
             background: white; border: 2px solid #e2e8f0; border-radius: 8px;
-            padding: 12px 20px; margin-bottom: 10px; cursor: pointer;
-            font-size: 16px; text-align: left; transition: all 0.2s; width: 100%;
+            padding: 16px 24px; margin-bottom: 15px; cursor: pointer; /* INCREASED */
+            font-size: 18px; text-align: left; transition: all 0.2s; width: 100%; /* INCREASED */
             font-family: 'Lato', sans-serif; color: #334155;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             display: flex; align-items: center; gap: 15px;
@@ -366,9 +366,9 @@
         .quiz-option:hover { border-color: #0d9488; background: #f0fdfa; transform: translateX(5px); }
         .quiz-option.correct { background: #dcfce7; border-color: #22c55e; color: #166534; transform: none;}
         .quiz-option.incorrect { background: #fee2e2; border-color: #ef4444; color: #991b1b; transform: none;}
-        .quiz-feedback { margin-top: 15px; font-size: 18px; font-weight: 600; min-height: 50px; line-height: 1.5; opacity: 0; transition: opacity 0.3s; }
+        .quiz-feedback { margin-top: 20px; font-size: 20px; font-weight: 600; min-height: 50px; line-height: 1.5; opacity: 0; transition: opacity 0.3s; } /* INCREASED */
         .quiz-feedback.show { opacity: 1; }
-        .option-letter { font-weight: 700; background: #e2e8f0; border-radius: 4px; padding: 4px 12px; color: #475569; }
+        .option-letter { font-weight: 700; background: #e2e8f0; border-radius: 4px; padding: 6px 14px; color: #475569; } /* INCREASED */
         .correct .option-letter { background: #bbf7d0; color: #166534; }
         .incorrect .option-letter { background: #fecaca; color: #991b1b; }
         
@@ -681,14 +681,14 @@
     <div class="content-area">
         <div class="two-column">
             <div>
-                <div class="image-wrapper" style="height: 250px; margin-bottom: 20px;">
+                <div class="image-wrapper" style="height: 320px; margin-bottom: 20px;">
                     <img src="https://c8y.doxcdn.com/image/upload/c_fill,fl_progressive,h_800,q_auto,w_1600/ucyueplh75lz0qlz46zv.webp" alt="Community isolation concept">
                 </div>
                 <h3>The Fear of Stigma</h3>
                 <p>Mental illness is often labeled as "crazy" or "abnormal". Patients fear severe social isolation, discrimination, and ostracization from their core family and community networks.</p>
             </div>
             <div>
-                <div class="image-wrapper" style="height: 250px; margin-bottom: 20px;">
+                <div class="image-wrapper" style="height: 320px; margin-bottom: 20px;">
                     <img src="https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=800&auto=format&fit=crop" alt="Navigating a complex map or system">
                 </div>
                 <h3>Lack of System Awareness</h3>
